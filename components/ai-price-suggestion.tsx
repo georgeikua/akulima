@@ -36,9 +36,9 @@ export function AIPriceSuggestion({ produceType, grade, onSuggestedPrice }: AIPr
       // Mock data based on produce type and grade
       const mockPriceData: Record<string, Record<string, any>> = {
         watermelon: {
-          A: { suggested: 35, min: 30, max: 40, avg: 35, fairness: 0.9 },
-          B: { suggested: 28, min: 25, max: 35, avg: 30, fairness: 0.85 },
-          C: { suggested: 22, min: 20, max: 25, avg: 22, fairness: 0.8 },
+          A: { suggested: 74, min: 65, max: 80, avg: 72, fairness: 0.92 },
+          B: { suggested: 65, min: 60, max: 70, avg: 65, fairness: 0.88 },
+          C: { suggested: 55, min: 50, max: 60, avg: 55, fairness: 0.85 },
         },
         tomatoes: {
           A: { suggested: 90, min: 80, max: 100, avg: 90, fairness: 0.95 },

@@ -23,10 +23,11 @@ import { AIPriceSuggestion } from "@/components/ai-price-suggestion"
 import { FeeBreakdown } from "@/components/fee-breakdown"
 import { type TruckSize, getMinimumQuantity } from "@/lib/fee-calculator"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Checkbox } from "@/components/ui/checkbox"
 
 // Sample market price data
 const MARKET_PRICES = {
-  watermelon: { min: 25, max: 35, avg: 30 },
+  watermelon: { min: 55, max: 80, avg: 72 },
   tomatoes: { min: 70, max: 90, avg: 80 },
   potatoes: { min: 30, max: 45, avg: 35 },
   onions: { min: 50, max: 70, avg: 60 },
@@ -406,12 +407,7 @@ export default function PostRequestPage() {
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                   <FormControl>
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                      checked={field.value}
-                      onChange={field.onChange}
-                    />
+                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormLabel>Notify Eligible Groups</FormLabel>

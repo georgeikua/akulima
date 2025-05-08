@@ -115,11 +115,13 @@ const upcomingEvents = [
 // Sample open bids
 const openBids = [
   {
-    id: "BID-001",
-    buyer: "Nairobi Grocers Ltd",
-    produce: "Tomatoes",
-    quantity: "500 kg",
-    deadline: "2023-12-20",
+    id: "WM-2025-001",
+    buyer: "Nairobi Fresh Markets Ltd",
+    produce: "Watermelons (Premium)",
+    quantity: "3,000 kg",
+    deadline: "2025-05-15",
+    price: 74,
+    total: 222000,
   },
   {
     id: "BID-002",
@@ -127,6 +129,8 @@ const openBids = [
     produce: "Kale (Sukuma Wiki)",
     quantity: "1000 bundles",
     deadline: "2023-12-22",
+    price: 40,
+    total: 40000,
   },
   {
     id: "BID-003",
@@ -134,6 +138,8 @@ const openBids = [
     produce: "Avocados",
     quantity: "800 kg",
     deadline: "2023-12-25",
+    price: 150,
+    total: 120000,
   },
 ]
 
@@ -353,7 +359,8 @@ export default function GroupDashboardPage() {
                   <div>
                     <p className="font-medium">{bid.produce}</p>
                     <p className="text-sm text-muted-foreground">
-                      {bid.buyer} • {bid.quantity}
+                      {bid.buyer} • {bid.quantity} •{" "}
+                      <span className="text-primary font-medium">KES {bid.price}/kg</span>
                     </p>
                   </div>
                   <div className="flex items-center gap-2 mt-2 sm:mt-0">

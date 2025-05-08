@@ -4,7 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { QRCodeSVG } from "qrcode.react"
-import { MapPin, Phone, Mail, Users, Calendar, Share2, Download, ExternalLink } from "lucide-react"
+import { MapPin, Phone, Mail, Users, Calendar, Share2, Download, ExternalLink, AlertTriangle } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -317,6 +317,52 @@ export function GroupProfile({
           </Card>
         </div>
       </div>
+      {/* Demo Bid Request */}
+      <Card className="mt-6 border-2 border-primary/20 bg-primary/5">
+        <CardHeader>
+          <CardTitle className="flex items-center text-primary">
+            <AlertTriangle className="mr-2 h-5 w-5" />
+            New Bid Request Available!
+          </CardTitle>
+          <CardDescription>A buyer is looking for watermelons from your group</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="font-semibold text-lg">Premium Watermelons Needed</h3>
+                <p className="text-sm text-muted-foreground">Nairobi Fresh Markets Ltd</p>
+              </div>
+              <Badge variant="outline" className="bg-green-100 text-green-800 hover:bg-green-100">
+                New Request
+              </Badge>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm font-medium">Quantity</p>
+                <p className="text-lg font-bold">3,000 kg</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium">Price Offered</p>
+                <p className="text-lg font-bold text-primary">KES 74/kg</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium">Total Value</p>
+                <p className="text-lg font-bold">KES 222,000</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium">Delivery By</p>
+                <p className="text-lg font-bold">May 15, 2025</p>
+              </div>
+            </div>
+            <div className="pt-2">
+              <Button asChild className="w-full">
+                <Link href="/orders/WM-2025-001/bid">Submit Bid Now</Link>
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }
