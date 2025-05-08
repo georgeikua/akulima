@@ -68,7 +68,7 @@ export function GroupMemberFormWithVerification({ onSubmit, defaultValues, isEdi
       phone: "",
       email: "",
       role: "member",
-      gender: "",
+      gender: "female", // Default to female since only women are eligible
       age: undefined,
       location: "",
       idNumber: "",
@@ -86,10 +86,12 @@ export function GroupMemberFormWithVerification({ onSubmit, defaultValues, isEdi
       form.setValue("phone", data.phoneNumber)
     }
 
-    // If ID verification, update the ID number and name
+    // If ID verification, update the ID number, name, gender and age
     if (data.method === "id") {
       form.setValue("idNumber", data.idNumber)
       form.setValue("name", data.fullName)
+      form.setValue("gender", data.gender.toLowerCase())
+      form.setValue("age", data.age)
     }
 
     // Move to the details step
@@ -118,6 +120,13 @@ export function GroupMemberFormWithVerification({ onSubmit, defaultValues, isEdi
         </TabsList>
 
         <TabsContent value="verification" className="space-y-4 pt-4">
+          <Alert className="bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-900/20 dark:border-blue-900/30 dark:text-blue-400 mb-4">
+            <AlertTitle className="text-sm font-medium">Verification Requirements</AlertTitle>
+            <AlertDescription className="text-xs">
+              Currently, only women are eligible to join farmer groups. The system will verify gender through ID
+              verification.
+            </AlertDescription>
+          </Alert>
           <MemberVerification onVerificationComplete={handleVerificationComplete} />
         </TabsContent>
 
@@ -144,7 +153,7 @@ export function GroupMemberFormWithVerification({ onSubmit, defaultValues, isEdi
                     <FormItem>
                       <FormLabel>Full Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., John Kamau" {...field} />
+                        <Input placeholder="e.g., Mary Wanjiku" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -157,7 +166,7 @@ export function GroupMemberFormWithVerification({ onSubmit, defaultValues, isEdi
                     <FormItem>
                       <FormLabel>ID Number</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., KE12345678" {...field} />
+                        <Input placeholder="e.g., 29384756" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -183,7 +192,7 @@ export function GroupMemberFormWithVerification({ onSubmit, defaultValues, isEdi
                     <FormItem>
                       <FormLabel>Email (Optional)</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., john@example.com" {...field} />
+                        <Input placeholder="e.g., mary@example.com" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -218,15 +227,19 @@ export function GroupMemberFormWithVerification({ onSubmit, defaultValues, isEdi
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Gender</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        disabled={!isEditing && verificationData}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select gender" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="male">Male</SelectItem>
                           <SelectItem value="female">Female</SelectItem>
+                          <SelectItem value="male">Male</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />

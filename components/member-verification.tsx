@@ -64,21 +64,67 @@ export function MemberVerification({ onVerificationComplete }: MemberVerificatio
       // Simulate API call to SmileID
       await new Promise((resolve) => setTimeout(resolve, 1500))
 
-      // Mock response from SmileID API
-      const mockResponse = {
-        fullName: "George Wanyika Ikua",
-        country: "Kenya",
-        idType: "NATIONAL_ID",
-        idNumber: data.idNumber,
-        secondaryIdNumber: "253749297",
-        expiryDate: "Not Available",
-        isAlive: "Not Available",
-        nationality: "Not Available",
-        issuanceDate: "2022-05-20",
-        dateOfBirth: "1976-08-20",
-        phoneNumber: "Not Available",
-        gender: "Male",
-        address: "12111 NYERI KING'ONG'O MAJENGO LOCATION - MUKARO DIVISION - MUNICIPALITY DISTRICT - NYERI EAST.",
+      // Mock response from SmileID API based on ID number
+      let mockResponse
+
+      // Test ID for successful female verification: 29384756
+      // Test ID for failed verification (male): 12345678
+      if (data.idNumber === "29384756") {
+        mockResponse = {
+          fullName: "Mary Wanjiku Kamau",
+          country: "Kenya",
+          idType: "NATIONAL_ID",
+          idNumber: data.idNumber,
+          secondaryIdNumber: "253749297",
+          expiryDate: "Not Available",
+          isAlive: "Not Available",
+          nationality: "Not Available",
+          issuanceDate: "2022-05-20",
+          dateOfBirth: "1986-08-20",
+          phoneNumber: "Not Available",
+          gender: "Female",
+          address: "12111 NYERI KING'ONG'O MAJENGO LOCATION - MUKARO DIVISION - MUNICIPALITY DISTRICT - NYERI EAST.",
+        }
+      } else if (data.idNumber === "12345678") {
+        mockResponse = {
+          fullName: "John Kamau Wanyika",
+          country: "Kenya",
+          idType: "NATIONAL_ID",
+          idNumber: data.idNumber,
+          secondaryIdNumber: "253749297",
+          expiryDate: "Not Available",
+          isAlive: "Not Available",
+          nationality: "Not Available",
+          issuanceDate: "2022-05-20",
+          dateOfBirth: "1986-08-20",
+          phoneNumber: "Not Available",
+          gender: "Male",
+          address: "12111 NYERI KING'ONG'O MAJENGO LOCATION - MUKARO DIVISION - MUNICIPALITY DISTRICT - NYERI EAST.",
+        }
+      } else {
+        // Random gender for other IDs
+        const genders = ["Female", "Male"]
+        const randomGender = genders[Math.floor(Math.random() * genders.length)]
+        const randomName =
+          randomGender === "Female"
+            ? ["Sarah Njeri", "Jane Muthoni", "Elizabeth Wambui"][Math.floor(Math.random() * 3)]
+            : ["David Kamau", "Peter Mwangi", "James Kariuki"][Math.floor(Math.random() * 3)]
+
+        mockResponse = {
+          fullName: `${randomName} Kimani`,
+          country: "Kenya",
+          idType: "NATIONAL_ID",
+          idNumber: data.idNumber,
+          secondaryIdNumber: "253749297",
+          expiryDate: "Not Available",
+          isAlive: "Not Available",
+          nationality: "Not Available",
+          issuanceDate: "2022-05-20",
+          dateOfBirth: "1986-08-20",
+          phoneNumber: "Not Available",
+          gender: randomGender,
+          address: "12111 NYERI KING'ONG'O MAJENGO LOCATION - MUKARO DIVISION - MUNICIPALITY DISTRICT - NYERI EAST.",
+        }
       }
 
       // Calculate age from date of birth
@@ -90,12 +136,11 @@ export function MemberVerification({ onVerificationComplete }: MemberVerificatio
         age--
       }
 
-      // Check eligibility
+      // Check eligibility - only females are eligible now
       const isFemale = mockResponse.gender === "Female"
-      const isYouth = age < 35
 
-      if (!isFemale && !isYouth) {
-        setVerificationError("Only women and youth (males under 35) are eligible to join the group.")
+      if (!isFemale) {
+        setVerificationError("Only women are eligible to join the group at this time.")
         setIsVerifying(false)
         return
       }
@@ -124,10 +169,29 @@ export function MemberVerification({ onVerificationComplete }: MemberVerificatio
       // Simulate API call to verify phone
       await new Promise((resolve) => setTimeout(resolve, 1500))
 
-      // Mock phone verification (in a real app, this would check if the name matches)
-      const mockPhoneResponse = {
-        verified: true,
-        registeredName: "George Wanyika Ikua",
+      // Test phone for successful verification: 0712345678
+      // Test phone for failed verification: 0787654321
+      let mockPhoneResponse
+
+      if (data.phoneNumber === "0712345678") {
+        // Phone matches ID
+        mockPhoneResponse = {
+          verified: true,
+          registeredName: idData.fullName,
+        }
+      } else if (data.phoneNumber === "0787654321") {
+        // Phone doesn't match ID
+        mockPhoneResponse = {
+          verified: true,
+          registeredName: "Different Name",
+        }
+      } else {
+        // Random match/mismatch for other numbers
+        const matches = Math.random() > 0.5
+        mockPhoneResponse = {
+          verified: true,
+          registeredName: matches ? idData.fullName : "Different Name",
+        }
       }
 
       // Check if the name on the phone matches the ID
@@ -142,6 +206,7 @@ export function MemberVerification({ onVerificationComplete }: MemberVerificatio
         ...idData,
         phoneNumber: data.phoneNumber,
         mpesaVerified: true,
+        method: "id",
       })
 
       // Move to complete step
@@ -170,7 +235,22 @@ export function MemberVerification({ onVerificationComplete }: MemberVerificatio
                       <Input className="pl-8" placeholder="Enter your ID number" {...field} />
                     </div>
                   </FormControl>
-                  <FormDescription>Enter your national ID number for verification.</FormDescription>
+                  <FormDescription className="text-sm">
+                    Enter your national ID number for verification.
+                    <div className="mt-2 text-xs text-muted-foreground">
+                      <strong>Test IDs:</strong>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>
+                          <span className="font-mono bg-muted px-1 rounded">29384756</span> - Female ID (verification
+                          will succeed)
+                        </li>
+                        <li>
+                          <span className="font-mono bg-muted px-1 rounded">12345678</span> - Male ID (verification will
+                          fail)
+                        </li>
+                      </ul>
+                    </div>
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -216,7 +296,7 @@ export function MemberVerification({ onVerificationComplete }: MemberVerificatio
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">Gender:</span>
-                  <span>{idData.gender}</span>
+                  <span className="text-green-600 font-medium">{idData.gender}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">Age:</span>
@@ -244,7 +324,22 @@ export function MemberVerification({ onVerificationComplete }: MemberVerificatio
                         <Input className="pl-8" placeholder="Enter your M-PESA number" {...field} />
                       </div>
                     </FormControl>
-                    <FormDescription>Enter the phone number registered with M-PESA.</FormDescription>
+                    <FormDescription className="text-sm">
+                      Enter the phone number registered with M-PESA.
+                      <div className="mt-2 text-xs text-muted-foreground">
+                        <strong>Test Phone Numbers:</strong>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>
+                            <span className="font-mono bg-muted px-1 rounded">0712345678</span> - Matches ID name
+                            (verification will succeed)
+                          </li>
+                          <li>
+                            <span className="font-mono bg-muted px-1 rounded">0787654321</span> - Different name
+                            (verification will fail)
+                          </li>
+                        </ul>
+                      </div>
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
