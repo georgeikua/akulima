@@ -28,7 +28,7 @@ In traditional African value chains, women do the bulk of agricultural labor but
 ## 📦 Getting Started
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/akulima-platform.git
+git clone https://github.com/georgeikua/akulima.git
 cd akulima-platform
 cp .env.example .env.local  # set your Supabase + M-PESA keys
 npm install
