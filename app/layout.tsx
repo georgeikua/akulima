@@ -1,14 +1,23 @@
 import type React from "react"
-import "@/app/globals.css"
-import { Inter } from "next/font/google"
+import type { Metadata } from "next"
+import { Mona_Sans as FontSans } from "next/font/google"
+import { cn } from "@/lib/utils"
+import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { AuthProvider } from "@/lib/auth-context"
 
-const inter = Inter({ subsets: ["latin"] })
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
 
-export const metadata = {
-  title: "FreshXchange | Certified Herb & Vegetable Exporters (UK–EU–GCC)",
-  description:
-    "Export quality basil, chives, and French beans from East Africa to Europe and the Gulf. Certified, traceable, airfreight ready — FreshXchange UK.",
+export const metadata: Metadata = {
+  title: "Akulima - WhatsApp Based Market",
+  description: "Connecting farmers directly with buyers for better prices",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
+  themeColor: "#7ADA53",
+  appleWebAppCapable: "yes",
+  appleWebAppStatusBarStyle: "black-translucent",
     generator: 'v0.dev'
 }
 
@@ -19,9 +28,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          {children}
+          <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
       </body>
     </html>
